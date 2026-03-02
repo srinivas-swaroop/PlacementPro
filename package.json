@@ -1,0 +1,21 @@
+{
+  "name": "placementpro",
+  "version": "1.0.0",
+  "description": "oneStep Destination for Students to track",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "start": "node index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "mongoose": "^9.2.3"
+  }
+}

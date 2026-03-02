@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PlacementPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body style="
+    margin:0;
+    padding:0;
+    background-color:#000;
+    color:#fff;
+    font-family:'Inter', sans-serif;
+">
+
+    <!-- NAVBAR -->
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:25px 60px;
+    ">
+        <div style="
+            font-size:20px;
+            font-weight:600;
+            letter-spacing:1px;
+        ">
+            PlacementPro
+        </div>
+
+        <div>
+            <a href="/auth/login" style="
+                text-decoration:none;
+                color:#aaa;
+                margin-right:20px;
+                font-weight:500;
+                transition:0.3s;
+            "
+            onmouseover="this.style.color='#fff'"
+            onmouseout="this.style.color='#aaa'">
+                Login
+            </a>
+
+            <a href="/auth/signup" style="
+                text-decoration:none;
+                padding:10px 24px;
+                border-radius:50px;
+                border:1px solid #fff;
+                color:#fff;
+                transition:0.3s;
+            "
+            onmouseover="this.style.background='#fff'; this.style.color='#000';"
+            onmouseout="this.style.background='transparent'; this.style.color='#fff';">
+                Sign Up
+            </a>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <div style="
+        height:80vh;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        text-align:center;
+        padding:0 20px;
+    ">
+
+        <h1 style="
+            font-size:70px;
+            font-weight:600;
+            max-width:1000px;
+            line-height:1.1;
+            margin-bottom:25px;
+        ">
+            Crack placements smarter.<br>
+            Track. Prepare. Succeed.
+        </h1>
+
+        <p style="
+            color:#888;
+            font-size:20px;
+            max-width:750px;
+            line-height:1.6;
+            margin-bottom:40px;
+        ">
+            Analyze your LinkedIn profile, improve your resume for specific job roles, and track your entire placement journey
+        </p>
+
+        <div>
+
+            <a href="/auth/signup" style="
+                text-decoration:none;
+                padding:14px 38px;
+                border-radius:60px;
+                background:#fff;
+                color:#000;
+                font-weight:600;
+                margin-right:15px;
+                transition:0.3s;
+                display:inline-block;
+            "
+            onmouseover="this.style.opacity='0.8'"
+            onmouseout="this.style.opacity='1'">
+                Get Started
+            </a>
+
+            <a href="/auth/login" style="
+                text-decoration:none;
+                padding:14px 38px;
+                border-radius:60px;
+                border:1px solid #444;
+                color:#fff;
+                font-weight:500;
+                transition:0.3s;
+                display:inline-block;
+            "
+            onmouseover="this.style.border='1px solid #fff'"
+            onmouseout="this.style.border='1px solid #444'">
+                Login
+            </a>
+
+        </div>
+    </div>
+
+</body>
+</html>

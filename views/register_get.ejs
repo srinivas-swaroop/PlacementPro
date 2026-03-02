@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Account | PlacementPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body style="
+    margin:0;
+    background:#000;
+    color:#fff;
+    font-family:'Inter', sans-serif;
+    display:flex;
+    height:100vh;
+">
+
+    <!-- LEFT SIDE (FORM) -->
+    <div style="
+        flex:1;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding:60px;
+    ">
+
+        <div style="width:380px;">
+
+            <h1 style="font-weight:600; margin-bottom:10px;">Create Account</h1>
+            <p style="color:#888; margin-bottom:30px;">
+                Start preparing smarter with PlacementPro.
+            </p>
+
+            <!-- ERROR MESSAGE -->
+            <% if (error) { %>
+                <div style="
+                    background:#2a0d0d;
+                    color:#ff4d4d;
+                    padding:12px;
+                    border-radius:8px;
+                    margin-bottom:20px;
+                    font-size:14px;">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <!-- SUCCESS MESSAGE -->
+            <% if (success) { %>
+                <div style="
+                    background:#0d2a17;
+                    color:#4dff88;
+                    padding:12px;
+                    border-radius:8px;
+                    margin-bottom:20px;
+                    font-size:14px;">
+                    <%= success %>
+                </div>
+            <% } %>
+
+            <form action="/auth/signup" method="POST">
+
+                <input 
+                    type="text" 
+                    name="username" 
+                    placeholder="Username" 
+                    required
+                    value="<%= typeof old !== 'undefined' ? old.username : '' %>"
+                    style="
+                    width:100%;
+                    padding:14px;
+                    margin-bottom:15px;
+                    background:#111;
+                    border:1px solid #222;
+                    border-radius:50px;
+                    color:#fff;
+                    outline:none;">
+
+                <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="Email" 
+                    required
+                    value="<%= typeof old !== 'undefined' ? old.email : '' %>"
+                    style="
+                    width:100%;
+                    padding:14px;
+                    margin-bottom:15px;
+                    background:#111;
+                    border:1px solid #222;
+                    border-radius:50px;
+                    color:#fff;
+                    outline:none;
+                ">
+
+                <input 
+                    type="password" 
+                    name="password" 
+                    placeholder="Password" 
+                    required
+                    style="
+                    width:100%;
+                    padding:14px;
+                    margin-bottom:20px;
+                    background:#111;
+                    border:1px solid #222;
+                    border-radius:50px;
+                    color:#fff;
+                    outline:none;
+                ">
+
+                <button type="submit"
+                    style="
+                    width:100%;
+                    padding:14px;
+                    border-radius:50px;
+                    border:none;
+                    background:#fff;
+                    color:#000;
+                    font-weight:600;
+                    cursor:pointer;
+                    transition:0.3s;
+                "
+                onmouseover="this.style.opacity='0.8'"
+                onmouseout="this.style.opacity='1'">
+                    Create Account
+                </button>
+
+            </form>
+
+            <div style="margin:25px 0; text-align:center; color:#555;">OR</div>
+
+            <a href="/auth/google"
+                style="
+                display:block;
+                text-align:center;
+                padding:12px;
+                border-radius:50px;
+                border:1px solid #333;
+                text-decoration:none;
+                color:#fff;
+                transition:0.3s;
+            "
+            onmouseover="this.style.border='1px solid #fff'"
+            onmouseout="this.style.border='1px solid #333'">
+                Continue with Google
+            </a>
+
+            <p style="color:#888; margin-top:25px;">
+                Already have an account?
+                <a href="/auth/login" style="color:#fff; text-decoration:none;">Login</a>
+            </p>
+
+        </div>
+    </div>
+
+    <!-- RIGHT SIDE (GRAPHIC) -->
+    <div style="
+        flex:1;
+        background:#0a0a0a;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        position:relative;
+    ">
+
+        <!-- Minimal SVG Illustration -->
+        <svg width="400" height="400" viewBox="0 0 200 200" fill="none">
+            <circle cx="100" cy="100" r="80" stroke="#222" stroke-width="2"/>
+            <circle cx="100" cy="100" r="50" stroke="#444" stroke-width="2"/>
+            <circle cx="100" cy="100" r="20" fill="#fff"/>
+        </svg>
+
+        <div style="
+            position:absolute;
+            bottom:60px;
+            text-align:center;
+            color:#777;
+            max-width:300px;
+        ">
+            Track applications. <br>
+            Monitor interviews. <br>
+            Stay consistent.
+        </div>
+
+    </div>
+
+</body>
+</html>
