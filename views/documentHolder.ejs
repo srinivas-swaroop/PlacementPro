@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Documents | PlacementPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body style="
+    margin:0;
+    background:#000;
+    color:#fff;
+    font-family:'Inter', sans-serif;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+">
+
+    <!-- NAVBAR -->
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:20px 60px;
+        border-bottom:1px solid #111;
+    ">
+        <a href="/dashboard" style="text-decoration:none; color:#fff;">
+    <h2 style="margin:0; font-weight:600;">PlacementPro</h2>
+</a>
+
+        <div>
+            <span style="margin-right:20px; color:#aaa;">
+                Welcome, <%= username %>
+            </span>
+
+            <a href="/auth/logout" style="
+                text-decoration:none;
+                padding:8px 18px;
+                border-radius:20px;
+                border:1px solid #333;
+                color:#fff;
+                font-size:14px;
+            "
+            onmouseover="this.style.border='1px solid #fff'"
+            onmouseout="this.style.border='1px solid #333'">
+                Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div style="
+        flex:1;
+        padding:60px;
+    ">
+
+        <!-- HEADER SECTION -->
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:40px;
+        ">
+            <div>
+                <h1 style="font-weight:600; margin-bottom:10px;">
+                    Your Documents
+                </h1>
+                <p style="color:#777;">
+                    Securely manage all your placement documents in one place.
+                </p>
+            </div>
+
+            <!-- Upload Button -->
+            <form action="/documents/upload" method="POST" enctype="multipart/form-data">
+
+    <input 
+        type="file" 
+        name="document" 
+        id="fileUpload" 
+        style="display:none"
+        onchange="this.form.submit()"
+    >
+
+    <label for="fileUpload" style="
+        text-decoration:none;
+        background:#fff;
+        color:#000;
+        padding:10px 20px;
+        border-radius:25px;
+        font-weight:600;
+        font-size:14px;
+        cursor:pointer;
+    ">
+        ➕ Upload
+    </label>
+
+</form>
+        </div>
+
+        <!-- DOCUMENT COUNT -->
+        <p style="color:#555; margin-bottom:30px;">
+            Total Files: <%= allFiles.length %>
+        </p>
+
+        <% if (allFiles.length === 0) { %>
+
+            <!-- EMPTY STATE -->
+            <div style="
+                background:#0a0a0a;
+                padding:50px;
+                border-radius:15px;
+                border:1px solid #111;
+                text-align:center;
+                color:#777;
+            ">
+                No documents uploaded yet.
+            </div>
+
+        <% } else { %>
+
+            <!-- DOCUMENT GRID -->
+            <div style="
+                display:grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap:30px;
+            ">
+
+                <% allFiles.forEach(file => { %>
+
+                    <div style="
+                        background:#0a0a0a;
+                        padding:25px;
+                        border-radius:15px;
+                        border:1px solid #111;
+                        transition:0.3s;
+                    "
+                    onmouseover="this.style.border='1px solid #333'"
+                    onmouseout="this.style.border='1px solid #111'">
+
+ <%
+const parts = file.split('$');
+const fileName = parts[0];
+const lastUpdated = parts[1] || "Unknown";
+%>
+
+<h4 style="margin-top:0; word-break:break-word;">
+    <%= fileName %>
+</h4>
+
+<p style="color:#777; font-size:13px;">
+    Last updated: <%= lastUpdated %>
+</p>
+
+                        <div style="margin-top:20px;">
+                            <a href="/uploads/<%= userId %>/<%= file %>" 
+                               target="_blank"
+                               style="
+                                    text-decoration:none;
+                                    color:#fff;
+                                    font-size:14px;
+                                    margin-right:15px;
+                               ">
+                                View
+                            </a>
+
+                            <form action="/documents/delete" method="POST" style="display:inline;">
+    
+    <input type="hidden" name="filename" value="<%= file %>">
+
+    <button type="submit" style="
+        background:none;
+        border:none;
+        color:#888;
+        font-size:14px;
+        cursor:pointer;
+    ">
+        Delete
+    </button>
+
+</form>
+                        </div>
+
+                    </div>
+
+                <% }) %>
+
+            </div>
+
+        <% } %>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div style="
+        padding:20px;
+        text-align:center;
+        border-top:1px solid #111;
+        color:#555;
+        font-size:13px;
+    ">
+        © <%= new Date().getFullYear() %> PlacementPro. Built for smarter placements.
+    </div>
+
+</body>
+</html>

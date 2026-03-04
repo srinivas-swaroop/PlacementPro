@@ -8,10 +8,6 @@ dotenv.config();
 
 const User = require('../models/userModel');
 
-const mongoose = require('mongoose');
-
-
-
 
 authRouter.get('/login', (req, res) => {
     res.render('login_get', {

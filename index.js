@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 
 const { authRouter } = require('./routes/auth');
 const { dashboardRouter } = require('./routes/dashboard');
+const { documentHolder } = require('./routes/docuementHolder');
 
 const mongoose = require('mongoose');
 
@@ -16,6 +17,7 @@ mongoose.connect('mongodb://localhost:27017/placementPro').then(() =>{
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static("uploads"));
 
 app.set('view engine', 'ejs');
 
@@ -25,6 +27,7 @@ app.get('/', (req, res) =>{
 
 app.use('/auth', authRouter);
 app.use('/dashboard', dashboardRouter);
+app.use('/documents', documentHolder);
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
