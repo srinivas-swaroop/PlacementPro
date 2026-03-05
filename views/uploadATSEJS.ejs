@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume ATS Optimizer | PlacementPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body style="
+    margin:0;
+    background:#000;
+    color:#fff;
+    font-family:'Inter', sans-serif;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+">
+
+<!-- NAVBAR -->
+<div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 60px;
+    border-bottom:1px solid #111;
+">
+
+<a href="/dashboard" style="text-decoration:none; color:#fff;">
+<h2 style="margin:0; font-weight:600;">PlacementPro</h2>
+</a>
+
+<div>
+<span style="margin-right:20px; color:#aaa;">
+Welcome, <%= username %>
+</span>
+
+<a href="/auth/logout" style="
+text-decoration:none;
+padding:8px 18px;
+border-radius:20px;
+border:1px solid #333;
+color:#fff;
+font-size:14px;
+"
+onmouseover="this.style.border='1px solid #fff'"
+onmouseout="this.style.border='1px solid #333'">
+Logout
+</a>
+</div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div style="
+flex:1;
+padding:60px;
+">
+
+<!-- HEADER -->
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+">
+
+<div>
+<h1 style="font-weight:600; margin-bottom:10px;">
+Resume ATS Optimizer
+</h1>
+
+<p style="color:#777;">
+Upload your resume and match it against your target role.
+</p>
+</div>
+
+</div>
+
+
+<!-- UPLOAD CARD -->
+<!-- UPLOAD CARD -->
+<div style="
+background:#0a0a0a;
+padding:30px;
+border-radius:15px;
+border:1px solid #111;
+margin-bottom:40px;
+">
+
+<form action="/documents/ATS/upload" method="POST" enctype="multipart/form-data">
+
+<div style="margin-bottom:20px;">
+<label style="color:#888; font-size:14px;">Target Role / Job Description</label>
+
+<textarea name="roleDescription" required
+style="
+width:100%;
+margin-top:8px;
+padding:12px;
+background:#000;
+border:1px solid #222;
+color:#fff;
+border-radius:8px;
+font-family:'Inter', sans-serif;
+resize:none;
+height:120px;
+"></textarea>
+</div>
+
+<div style="display:flex; justify-content:space-between; align-items:center;">
+
+<input 
+type="file"
+name="resumeATS"
+required
+style="color:#aaa"
+>
+
+<button type="submit" style="
+background:#fff;
+color:#000;
+padding:10px 20px;
+border:none;
+border-radius:25px;
+font-weight:600;
+cursor:pointer;
+">
+Analyze Resume
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+
+<!-- RESULTS SECTION -->
+
+<% if (typeof atsScore !== 'undefined') { %>
+
+<div style="
+display:grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap:30px;
+">
+
+<!-- ATS SCORE -->
+<div style="
+background:#0a0a0a;
+padding:30px;
+border-radius:15px;
+border:1px solid #111;
+">
+
+<h3 style="margin-top:0;">ATS Score</h3>
+
+<div style="
+font-size:40px;
+font-weight:600;
+margin-top:10px;
+color:#fff;
+">
+<%= atsScore %>% 
+</div>
+
+<p style="color:#777; margin-top:10px;">
+Your resume match score for the given role.
+</p>
+
+</div>
+
+
+<!-- SUGGESTIONS -->
+<div style="
+background:#0a0a0a;
+padding:30px;
+border-radius:15px;
+border:1px solid #111;
+">
+
+<h3 style="margin-top:0;">Suggestions</h3>
+
+<ul style="color:#888; padding-left:20px;">
+
+<% suggestions.forEach(function(suggestion){ %>
+
+<li style="margin-bottom:10px;">
+<%= suggestion %>
+</li>
+
+<% }) %>
+
+</ul>
+
+</div>
+
+</div>
+
+<% } %>
+
+</div>
+
+
+<!-- FOOTER -->
+<div style="
+padding:20px;
+border-top:1px solid #111;
+color:#555;
+font-size:13px;
+display:flex;
+justify-content:space-between;
+">
+
+<div>
+© <%= new Date().getFullYear() %> PlacementPro. Built for smarter placements.
+</div>
+
+<div>
+Designed & developed by <span style="color:#fff;">Srinivas Swaroop</span>
+</div>
+
+</div>
+
+</body>
+</html>
