@@ -7,8 +7,9 @@ const { dashboardRouter } = require('./routes/dashboard');
 const { documentHolder } = require('./routes/docuementHolder');
 
 const mongoose = require('mongoose');
+const PORT = process.env.PORT || 3000;
 
-mongoose.connect('mongodb://localhost:27017/placementPro').then(() =>{
+mongoose.connect(process.env.MONGODB_URL).then(() =>{
     console.log('Connected to MongoDB');
 }).catch((Err) => {
     console.error('Error connecting to MongoDB:', Err);
@@ -29,6 +30,6 @@ app.use('/auth', authRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/documents', documentHolder);
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log('Server is running on port 3000');
 })
