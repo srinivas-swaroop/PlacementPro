@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-async function sendMail(email, otp){
+async function sendMail(email, otp, name){
     try {
     await transporter.sendMail({
         from: process.env.EMAIL,
@@ -30,10 +30,34 @@ async function sendMail(email, otp){
             ">
 
                 <!-- HEADER -->
-                <h1 style="margin:0; font-weight:600;">PlacementPro</h1>
-                <p style="color:#888; margin-top:5px;">
-                    Crack placements smarter.
-                </p>
+                 <h1 style="
+        margin:0;
+        font-weight:600;
+        font-size:26px;
+        letter-spacing:0.5px;
+    ">
+        PlacementPro
+    </h1>
+
+    <p style="
+        margin:8px 0 0 0;
+        color:#bbb;
+        font-size:15px;
+    ">
+        Hi <span style="color:#fff; font-weight:500;">${name}</span>,
+    </p>
+
+    <p style="
+        margin:6px 0 0 0;
+        color:#888;
+        font-size:14px;
+        letter-spacing:0.3px;
+    ">
+        Crack placements smarter.
+    </p>
+
+
+
 
                 <!-- CARD -->
                 <div style="
@@ -86,7 +110,7 @@ async function sendMail(email, otp){
 
                 <!-- CTA -->
                 <div style="margin-top:30px; text-align:center;">
-                    <a href="/auth/login"
+                    <a href="https://placementpro-y3bv.onrender.com/auth/login"
                         style="
                         display:inline-block;
                         padding:12px 24px;

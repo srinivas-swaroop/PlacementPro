@@ -188,7 +188,7 @@ authRouter.post('/forget', async (req, res)=>{
         otp
     });
 
-    await mail.sendMail(email, otp);
+    await mail.sendMail(email, otp, existingUser.username);
 
     res.render('forgetEJS',{
         error : null,
