@@ -23,6 +23,7 @@
     "mongodb": "^7.1.0",
     "mongoose": "^9.2.3",
     "multer": "^2.1.0",
+    "nodemailer": "^8.0.4",
     "openai": "^6.25.0",
     "pdf-parse": "^1.1.1"
   }

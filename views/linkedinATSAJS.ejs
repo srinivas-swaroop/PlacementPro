@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Resume ATS Optimizer | PlacementPro</title>
+    <title>LinkedIn Profile Optimizer | PlacementPro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 
@@ -64,18 +64,36 @@ margin-bottom:40px;
 
 <div>
 <h1 style="font-weight:600; margin-bottom:10px;">
-Resume ATS Optimizer
+LinkedIn Profile Optimizer
 </h1>
 
 <p style="color:#777;">
-Upload your resume and match it against your target role.
+Upload your LinkedIn profile PDF and optimize it for your target role.
 </p>
 </div>
 
 </div>
 
+<!-- HOW TO DOWNLOAD LINKEDIN PDF -->
+<div style="
+background:#0a0a0a;
+padding:25px;
+border-radius:15px;
+border:1px solid #111;
+margin-bottom:30px;
+">
 
-<!-- UPLOAD CARD -->
+<h3 style="margin-top:0;">How to Download LinkedIn Profile as PDF</h3>
+
+<ol style="color:#888; padding-left:20px; line-height:1.6;">
+<li>Go to your LinkedIn profile</li>
+<li>Click on <b>"More"</b> button (next to Edit Profile)</li>
+<li>Select <b>"Save to PDF"</b></li>
+<li>Your profile will download as a PDF file</li>
+</ol>
+
+</div>
+
 <!-- UPLOAD CARD -->
 <div style="
 background:#0a0a0a;
@@ -85,7 +103,7 @@ border:1px solid #111;
 margin-bottom:40px;
 ">
 
-<form action="/documents/ATS/upload" method="POST" enctype="multipart/form-data">
+<form action="/documents/linkedin/upload" method="POST" enctype="multipart/form-data">
 
 <div style="margin-bottom:20px;">
 <label style="color:#888; font-size:14px;">Target Role / Job Description</label>
@@ -120,7 +138,7 @@ transition:0.2s;
 ">
 
 <span id="file-name" style="color:#555; font-size:14px;">
-Upload Resume
+Upload LinkedIn PDF
 </span>
 
 <span style="
@@ -136,7 +154,7 @@ Browse
 
 <input 
 type="file"
-name="resumeATS"
+name="linkedinPDF"
 required
 style="display:none"
 onchange="document.getElementById('file-name').innerText = this.files[0].name"
@@ -153,7 +171,7 @@ border-radius:25px;
 font-weight:600;
 cursor:pointer;
 ">
-Analyze Resume
+Analyze Profile
 </button>
 
 </div>
@@ -161,7 +179,6 @@ Analyze Resume
 </form>
 
 </div>
-
 
 <!-- RESULTS SECTION -->
 
@@ -173,7 +190,7 @@ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 gap:30px;
 ">
 
-<!-- ATS SCORE -->
+<!-- SCORE -->
 <div style="
 background:#0a0a0a;
 padding:30px;
@@ -181,7 +198,7 @@ border-radius:15px;
 border:1px solid #111;
 ">
 
-<h3 style="margin-top:0;">ATS Score</h3>
+<h3 style="margin-top:0;">Profile Score</h3>
 
 <div style="
 font-size:40px;
@@ -193,11 +210,10 @@ color:#fff;
 </div>
 
 <p style="color:#777; margin-top:10px;">
-Your resume match score for the given role.
+Your LinkedIn profile match score for the given role.
 </p>
 
 </div>
-
 
 <!-- SUGGESTIONS -->
 <div style="
@@ -228,7 +244,6 @@ border:1px solid #111;
 <% } %>
 
 </div>
-
 
 <!-- FOOTER -->
 <div style="

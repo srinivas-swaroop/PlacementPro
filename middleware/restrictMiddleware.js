@@ -15,8 +15,10 @@ async function restrictMiddleware(req, res, next) {
         if (!user) {
             return res.redirect('/auth/login');
         }
-
+        
+        console.log("Accesing MiddleWare Before setting req.user = user: ", req.headers, req.user);
         req.user = user;  
+        console.log("Accesing MiddleWare After setting req.user = user: ", req.headers, req.user);
         next();
 
     } catch (err) {

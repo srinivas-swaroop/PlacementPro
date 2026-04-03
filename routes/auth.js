@@ -133,4 +133,114 @@ authRouter.get('/logout', (req, res) => {
 });
 
 
+const forgetPassModel = require('../models/forgetPassword');
+const mail = require('../controllers/mail');
+
+function generateOTP(){
+    return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+authRouter.get('/forget', (req,res)=>{
+    res.render('forgetEJS',{
+        error : null,
+        success : null,
+    });
+})
+
+// authRouter.post('/forget', async (req, res)=>{
+//     const {email} = req.body.email;
+//     const existingUser = await User.findOne({email});
+
+//     if(!existingUser){
+//         return res.render('forgetEJS',{
+//             error : 'Account Isnt Registered in DB, Register',
+//             success : null
+//         })
+//     } else{
+//         const token = //random token generation
+
+//         forgetPassModel.findOneAndUpdate({email}, {token : token}, true);
+//         mail.sendMail(email, token);
+
+//     }
+// })
+
+authRouter.post('/forget', async (req, res)=>{
+    const { email } = req.body;
+
+    const existingUser = await User.findOne({ email });
+
+    if(!existingUser){
+        return res.render('forgetEJS',{
+            error : 'Account not registered',
+            success : null
+        });
+    }
+
+    const otp = generateOTP();
+
+    // delete old OTPs
+    await forgetPassModel.deleteMany({ email });
+
+    // save new OTP
+    await forgetPassModel.create({
+        email,
+        otp
+    });
+
+    await mail.sendMail(email, otp);
+
+    res.render('forgetEJS',{
+        error : null,
+        success : 'OTP sent to your email'
+    });
+});
+
+
+// authRouter.post('/forgetCheck', async (req, res)=>{
+//     const email = req.body.email;
+//     const token = req.body.token;
+//     const password = req.body.password;
+
+//     const existingUser = await forgetPassModel.findOne({email});
+
+//     if(existingUser.token === token){
+//         User.findOneAndUpdate({email}, {password : password}, true);
+
+//         res.render('forgetEJS', {
+//             error : null,
+//             success : 'Updated Password go Back and LogIn'
+//         })
+//     }
+// })
+
+authRouter.post('/forgetCheck', async (req, res)=>{
+    const { email, otp, password } = req.body;
+
+    const record = await forgetPassModel.findOne({ email, otp });
+
+    if(!record){
+        return res.render('forgetEJS',{
+            error : 'Invalid or expired OTP',
+            success : null
+        });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await User.findOneAndUpdate(
+        { email },
+        { password: hashedPassword }
+    );
+
+    // delete OTP after use
+    await forgetPassModel.deleteMany({ email });
+
+    res.render('forgetEJS', {
+        error : null,
+        success : 'Password updated successfully'
+    });
+});
+
+
 module.exports = {authRouter};
