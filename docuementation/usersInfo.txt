@@ -9,3 +9,10 @@
     cnsswaroop.gmail.com
     qwerty123
 }
+
+-----
+
+deployment
+taniya@gmail.com - qwerty123
+
+cnsswaroop@gmail.com - 12345678

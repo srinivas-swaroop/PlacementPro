@@ -40,6 +40,60 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+
+const storageATS = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const userObjectId = req.user._id;
+
+    const userFolderPath = path.join(
+      __dirname,
+      "..",
+      "uploads",
+      userObjectId.toString(),
+      "ResumeHolder"
+    );
+    if (!fs.existsSync(userFolderPath)) {
+      fs.mkdirSync(userFolderPath, { recursive: true });
+    }
+    cb(null, userFolderPath);
+  },
+
+
+
+  filename: function (req, file, cb) {
+    const now = new Date();
+    const day = now.getDate();
+    const month = now.getMonth() + 1;
+    const year = now.getFullYear();
+
+    const dateString = `${day}-${month}-${year}`;
+    //console.log(dateString);
+
+    cb(
+      null,
+      file.originalname 
+    );
+  },
+});
+
+const uploadATS = multer({ storage: storageATS });
+
+
+const storageLinkedin = multer.memoryStorage();
+const uploadLinkedin = multer({ storage : storageLinkedin});
+
+
+const pdf = require("pdf-parse/lib/pdf-parse");
+
+
+const OpenAI = require("openai");
+
+const client = new OpenAI({
+  apiKey: process.env.GROQ_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1"
+});
+
+
 documentHolder.get("/", restrictMiddleware, async (req, res) => {
   try {
     const userObjectId = req.user._id;
@@ -120,56 +174,7 @@ documentHolder.post('/delete', restrictMiddleware, (req, res) => {
     }
 })
 
-
-const pdf = require("pdf-parse/lib/pdf-parse");
-
-
-const OpenAI = require("openai");
-
-const client = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY,
-  baseURL: "https://api.groq.com/openai/v1"
-});
-
-
 //ResumeATS
-
-const storageATS = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const userObjectId = req.user._id;
-
-    const userFolderPath = path.join(
-      __dirname,
-      "..",
-      "uploads",
-      userObjectId.toString(),
-      "ResumeHolder"
-    );
-    if (!fs.existsSync(userFolderPath)) {
-      fs.mkdirSync(userFolderPath, { recursive: true });
-    }
-    cb(null, userFolderPath);
-  },
-
-
-
-  filename: function (req, file, cb) {
-    const now = new Date();
-    const day = now.getDate();
-    const month = now.getMonth() + 1;
-    const year = now.getFullYear();
-
-    const dateString = `${day}-${month}-${year}`;
-    //console.log(dateString);
-
-    cb(
-      null,
-      file.originalname 
-    );
-  },
-});
-
-const uploadATS = multer({ storage: storageATS });
 
 documentHolder.get("/uploadATS", restrictMiddleware, (req, res) => {
    try{
@@ -281,6 +286,77 @@ documentHolder.get("/ATS", restrictMiddleware, (req, res) => {
 });
 
 
+documentHolder.get("/linkedin", restrictMiddleware, (req, res) => {
+  try {
+    return res.render("linkedinATSAJS", {
+      username : req.user.username,
+      userId:req.user._id
+    });
+  } catch(err) {
+    console.error(err);
+    return res.redirect("/auth/login");
+  }
+})
 
+
+documentHolder.post(
+  "/linkedin/Upload",
+  restrictMiddleware,
+  uploadLinkedin.single("linkedinPDF"),
+  async (req, res) => {
+    try {
+      const pdfBuffer = req.file.buffer;
+
+      const pdfData = await pdf(pdfBuffer);
+      const linkedinText = pdfData.text.replace(/\s+/g, " ").trim();
+
+      //console.log(linkedinText);
+
+      const roleDescription = req.body.roleDescription;
+      const profileText = linkedinText.slice(0, 12000);
+      const response = await client.responses.create({
+        model: "llama-3.1-8b-instant",
+        input: `
+You are a LinkedIn Profile Optimizer.
+
+Job Description:
+${roleDescription}
+
+LinkedIn Profile:
+${profileText}
+
+Return ONLY valid JSON like this:
+
+{
+ "score": number out of 100,
+ "suggestions": ["suggestion1","suggestion2","suggestion3"]
+}
+`
+      });
+
+      let output = response.output_text;
+
+      
+      const match = output.match(/\{[\s\S]*\}/);
+
+      if (!match) {
+        throw new Error("Invalid AI response");
+      }
+
+      const parsed = JSON.parse(match[0]);
+
+    
+      res.render("linkedinATSAJS", {
+        username: req.user.username,
+        atsScore: parsed.score,
+        suggestions: parsed.suggestions
+      });
+
+    } catch (err) {
+      console.error("LinkedIn AI error:", err);
+      res.status(500).send("LinkedIn analysis failed");
+    }
+  }
+);
 
 module.exports = { documentHolder };
