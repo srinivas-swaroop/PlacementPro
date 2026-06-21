@@ -398,13 +398,16 @@ documentHolder.get("/placement-tracker", restrictMiddleware, async (req, res) =>
             applications = applications.filter(app => app.status === "Offer Received");
         }
 
-        res.render("placementTracker", {
-            username: req.user.username,
-            userId: req.user._id,
-            applications,
-            stages,
-            filter
-        });
+      
+res.render("placementTracker", {
+    username: req.user.username,
+    userId: req.user._id,
+    applications,
+    stages,
+    filterStatus: filter
+});
+
+
 
     } catch (err) {
         console.error(err);
