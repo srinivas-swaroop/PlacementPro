@@ -1,286 +1,753 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Placement Tracker | PlacementPro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  </head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Placement Tracker | PlacementPro</title>
 
-  <body
-    style="
-      margin: 0;
-      background: #000;
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    "
-  >
-    <!-- NAVBAR -->
-    <div
-      style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px 60px;
-        border-bottom: 1px solid #111;
-      "
-    >
-      <a href="/dashboard" style="text-decoration: none; color: #fff;">
-        <h2 style="margin: 0; font-weight: 600;">PlacementPro</h2>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Inter',sans-serif;
+      background:#000;
+      color:#fff;
+      min-height:100vh;
+    }
+
+    a{
+      text-decoration:none;
+      color:inherit;
+    }
+
+    .container{
+      width:92%;
+      max-width:1400px;
+      margin:auto;
+    }
+
+    /* NAVBAR */
+
+    .navbar{
+      border-bottom:1px solid #111;
+      padding:22px 0;
+    }
+
+    .nav-content{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .logo{
+      font-size:24px;
+      font-weight:700;
+      letter-spacing:-1px;
+    }
+
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:18px;
+    }
+
+    .username{
+      color:#888;
+      font-size:14px;
+    }
+
+    .logout-btn{
+      border:1px solid #333;
+      padding:10px 18px;
+      border-radius:30px;
+      transition:0.3s;
+      font-size:14px;
+    }
+
+    .logout-btn:hover{
+      border-color:#fff;
+      background:#111;
+    }
+
+    /* HEADER */
+
+    .hero{
+      padding:50px 0 30px;
+    }
+
+    .hero h1{
+      font-size:42px;
+      margin-bottom:10px;
+      font-weight:700;
+    }
+
+    .hero p{
+      color:#777;
+      font-size:15px;
+    }
+
+    /* FILTER */
+
+    .filter-box{
+      background:#0a0a0a;
+      border:1px solid #151515;
+      border-radius:18px;
+      padding:20px;
+      margin-bottom:30px;
+    }
+
+    .filter-form{
+      display:flex;
+      align-items:center;
+      gap:15px;
+      flex-wrap:wrap;
+    }
+
+    .filter-form select{
+      background:#000;
+      border:1px solid #333;
+      color:#fff;
+      padding:12px 15px;
+      border-radius:12px;
+      outline:none;
+      min-width:220px;
+    }
+
+    /* MAIN GRID */
+
+    .main-grid{
+      display:grid;
+      grid-template-columns:1.4fr 0.8fr;
+      gap:28px;
+      margin-bottom:50px;
+    }
+
+    /* APPLICATIONS */
+
+    .section-title{
+      font-size:22px;
+      margin-bottom:18px;
+      font-weight:600;
+    }
+
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:20px;
+    }
+
+    .app-card{
+      background:#0a0a0a;
+      border:1px solid #151515;
+      border-radius:20px;
+      padding:22px;
+      transition:0.35s;
+    }
+
+    .app-card:hover{
+      transform:translateY(-4px);
+      border-color:#2a2a2a;
+      box-shadow:0 10px 30px rgba(255,255,255,0.04);
+    }
+
+    .card-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      margin-bottom:18px;
+    }
+
+    .company-name{
+      font-size:20px;
+      font-weight:600;
+      margin-bottom:5px;
+      word-break:break-word;
+    }
+
+    .role{
+      color:#777;
+      font-size:13px;
+    }
+
+    .current-stage{
+      text-align:right;
+    }
+
+    .current-stage span{
+      display:block;
+    }
+
+    .current-stage .label{
+      color:#888;
+      font-size:12px;
+    }
+
+    .current-stage .value{
+      font-size:13px;
+      margin-top:5px;
+      color:#fff;
+      font-weight:600;
+    }
+
+    /* TIMELINE */
+
+    .timeline{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .timeline-item{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .timeline-left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .dot{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:#333;
+    }
+
+    .dot.active{
+      background:#fff;
+      box-shadow:0 0 0 4px rgba(255,255,255,0.08);
+    }
+
+    .timeline-stage{
+      font-size:13px;
+      color:#ddd;
+    }
+
+    .timeline-date{
+      font-size:12px;
+      color:#666;
+    }
+
+    /* SIDEBAR */
+
+    .panel{
+      background:#0a0a0a;
+      border:1px solid #151515;
+      border-radius:20px;
+      padding:22px;
+      margin-bottom:20px;
+    }
+
+    .panel form{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .panel label{
+      color:#888;
+      font-size:13px;
+    }
+
+    .panel input,
+    .panel select{
+      background:#000;
+      border:1px solid #333;
+      color:#fff;
+      padding:13px;
+      border-radius:12px;
+      outline:none;
+    }
+
+    .primary-btn{
+      margin-top:10px;
+      background:#fff;
+      color:#000;
+      border:none;
+      padding:14px;
+      border-radius:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .primary-btn:hover{
+      opacity:0.85;
+    }
+
+    .danger-btn{
+      background:none;
+      border:1px solid #ff4d4d;
+      color:#ff4d4d;
+      padding:14px;
+      border-radius:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .danger-btn:hover{
+      background:#ff4d4d18;
+    }
+
+    .message{
+      margin-top:12px;
+      font-size:13px;
+    }
+
+    .success{
+      color:#7CFFB2;
+    }
+
+    .error{
+      color:#ff6b6b;
+    }
+
+    /* FOOTER */
+
+    footer{
+      border-top:1px solid #111;
+      text-align:center;
+      padding:25px;
+      color:#555;
+      font-size:13px;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width:1000px){
+
+      .main-grid{
+        grid-template-columns:1fr;
+      }
+
+      .hero h1{
+        font-size:34px;
+      }
+    }
+
+    @media(max-width:600px){
+
+      .nav-content{
+        flex-direction:column;
+        gap:15px;
+      }
+
+      .hero{
+        padding-top:35px;
+      }
+
+      .hero h1{
+        font-size:28px;
+      }
+
+      .cards-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+
+/* FORM */
+
+.update-form{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.form-group label{
+  font-size:13px;
+  color:#888;
+  font-weight:500;
+}
+
+.form-group input,
+.form-group select{
+  width:100%;
+  background:#000;
+  border:1px solid #333;
+  color:#fff;
+  padding:14px 15px;
+  border-radius:14px;
+  outline:none;
+  font-size:14px;
+  transition:0.25s;
+}
+
+.form-group input:focus,
+.form-group select:focus{
+  border-color:#666;
+  box-shadow:0 0 0 3px rgba(255,255,255,0.05);
+}
+
+.primary-btn{
+  width:100%;
+  margin-top:5px;
+  background:#fff;
+  color:#000;
+  border:none;
+  padding:14px;
+  border-radius:14px;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.primary-btn:hover{
+  opacity:0.85;
+  transform:translateY(-1px);
+}
+
+
+
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="container nav-content">
+
+      <a href="/dashboard" class="logo">
+        PlacementPro
       </a>
 
-      <div>
-        <span style="margin-right: 20px; color: #aaa;">Welcome, <%= username %></span>
-        <a
-          href="/auth/logout"
-          style="
-            text-decoration: none;
-            padding: 8px 18px;
-            border-radius: 20px;
-            border: 1px solid #333;
-            color: #fff;
-            font-size: 14px;
-          "
-          onmouseover="this.style.border='1px solid #fff'"
-          onmouseout="this.style.border='1px solid #333'"
-        >
+      <div class="nav-right">
+        <span class="username">
+          Welcome, <%= username %>
+        </span>
+
+        <a href="/auth/logout" class="logout-btn">
           Logout
         </a>
       </div>
+
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero container">
+    <h1>Placement Tracker</h1>
+    <p>
+      Manage your placement journey with stage tracking and timelines.
+    </p>
+  </section>
+
+  <!-- FILTER -->
+  <div class="container">
+
+    <div class="filter-box">
+
+      <form
+        method="GET"
+        action="/documents/placement-tracker"
+        class="filter-form"
+      >
+
+        <label>Filter:</label>
+
+        <select name="status" onchange="this.form.submit()">
+
+          <option value="all"
+            <%= filterStatus === 'all' ? 'selected' : '' %>>
+            All Applications
+          </option>
+
+          <option value="active"
+            <%= filterStatus === 'active' ? 'selected' : '' %>>
+            Active
+          </option>
+
+          <option value="rejected"
+            <%= filterStatus === 'rejected' ? 'selected' : '' %>>
+            Rejected
+          </option>
+
+          <option value="offerReceived"
+            <%= filterStatus === 'offerReceived' ? 'selected' : '' %>>
+            Offer Received
+          </option>
+
+        </select>
+
+      </form>
+
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div style="flex: 1; padding: 60px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; gap: 20px;">
-        <div>
-          <h1 style="font-weight: 600; margin-bottom: 10px;">Placement Tracker</h1>
-          <p style="color: #777;">Track job applications stage-by-stage with timestamps.</p>
-        </div>
-      </div>
+    <!-- MAIN GRID -->
+    <div class="main-grid">
 
-      <!-- FILTERS -->
-      <div style="background: #0a0a0a; padding: 20px; border-radius: 15px; border: 1px solid #111; margin-bottom: 25px;">
-        <form method="GET" action="/documents/placement-tracker" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-          <label style="color:#888; font-size:14px;">Filter:</label>
-          <select
-            name="status"
-            style="
-              background:#000;
-              color:#fff;
-              border:1px solid #333;
-              padding:10px 12px;
-              border-radius:10px;
-              outline:none;
-            "
-            onchange="this.form.submit()"
-          >
-            <option value="all" <%= filterStatus === 'all' ? 'selected' : '' %>>All</option>
-            <option value="active" <%= filterStatus === 'active' ? 'selected' : '' %>>Active (Not Rejected)</option>
-            <option value="rejected" <%= filterStatus === 'rejected' ? 'selected' : '' %>>Rejected</option>
-            <option value="offerReceived" <%= filterStatus === 'offerReceived' ? 'selected' : '' %>>Offer Received</option>
-          </select>
-          <noscript>
-            <button type="submit" style="background:#fff; color:#000; border:none; padding:10px 16px; border-radius:12px; font-weight:600; cursor:pointer;">Apply</button>
-          </noscript>
-        </form>
-      </div>
+      <!-- LEFT -->
+      <div>
 
-      <!-- LAYOUT -->
-      <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px;">
+        <h2 class="section-title">
+          Your Applications
+        </h2>
 
-        <!-- COMPANY LIST -->
-        <div>
-          <h3 style="margin-top: 0; margin-bottom: 15px; font-weight: 600;">Your Companies</h3>
+        <% if (!applications || applications.length === 0) { %>
 
-          <% if (!applications || applications.length === 0) { %>
-            <div style="background:#0a0a0a; padding: 30px; border-radius: 15px; border:1px solid #111; color:#777; text-align:center;">
-              No applications yet. Add one from the form on the right.
-            </div>
-          <% } else { %>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px;">
-              <% applications.forEach(app => { %>
-                <% const statusKey = app.status; %>
-                <div
-                  style="
-                    background:#0a0a0a;
-                    padding: 20px;
-                    border-radius: 15px;
-                    border:1px solid #111;
-                    transition:0.3s;
-                  "
-                >
-                  <div style="display:flex; justify-content: space-between; gap:12px; align-items:flex-start;">
-                    <div>
-                      <h4 style="margin:0; word-break: break-word;"><%= app.companyName %></h4>
+          <div class="panel">
+            <p style="color:#777;">
+              No applications added yet.
+            </p>
+          </div>
 
-                      <% if (app.role) { %>
-                        <p style="color:#888; margin: 6px 0 0; font-size: 13px; word-break: break-word;">Role: <%= app.role %></p>
-                      <% } %>
-                    </div>
-                    <div style="text-align:right;">
-                      <div style="color:#fff; font-weight:700; font-size:13px;">Current</div>
-                      <div style="color:#bbb; font-size:13px; margin-top:4px;">
-                        <%= stageLabelMap[statusKey] || statusKey %>
+        <% } else { %>
+
+          <div class="cards-grid">
+
+            <% applications.forEach(app => { %>
+
+              <% const statusKey = app.status; %>
+
+              <div class="app-card">
+
+                <!-- TOP -->
+                <div class="card-top">
+
+                  <div>
+
+                    <h3 class="company-name">
+                      <%= app.companyName %>
+                    </h3>
+
+                    <% if(app.role){ %>
+                      <div class="role">
+                        <%= app.role %>
                       </div>
-                    </div>
+                    <% } %>
+
                   </div>
 
-                  <!-- PROGRESS INDICATOR -->
-                  <div style="margin-top: 15px;">
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                      <% stageOrder.forEach(stageKey => { %>
-                        <% const stageData = app.stages && app.stages.get ? app.stages.get(stageKey) : app.stages && app.stages[stageKey]; %>
-                        <% const hasDate = stageData && stageData.statusDate; %>
-                        <% const isDone = hasDate || (stageKey === app.status); %>
-                  <div style="display:flex; justify-content: space-between; gap: 10px; align-items:center;">
-                          <div style="display:flex; gap: 10px; align-items:center;">
-
-                            <div
-                              style="
-                                width: 10px;
-                                height: 10px;
-                                border-radius: 50%;
-                                background: <%= isDone ? '#fff' : '#333' %>;
-                                box-shadow: <%= isDone ? '0 0 0 3px rgba(255,255,255,0.08)' : 'none' %>;
-                              "
-                            ></div>
-                            <div style="color:#ddd; font-size:13px;">
-                              <%= stageLabelMap[stageKey] %>
-                            </div>
-                          </div>
-                          <div style="color:#777; font-size:12px;">
-                            <%= hasDate ? new Date(stageData.statusDate).toLocaleDateString() : '' %>
-                          </div>
-                        </div>
-                      <% }) %>
-                    </div>
+                  <div class="current-stage">
+                    <span class="label">Current</span>
+                    <span class="value">
+                      <%= stageLabelMap[statusKey] %>
+                    </span>
                   </div>
 
                 </div>
-              <% }) %>
-            </div>
-          <% } %>
-        </div>
 
-        <!-- STATUS UPDATE -->
-        <div>
-          <h3 style="margin-top: 0; margin-bottom: 15px; font-weight: 600;">Update Status</h3>
+                <!-- TIMELINE -->
+                <div class="timeline">
 
-          <div style="background:#0a0a0a; padding: 20px; border-radius: 15px; border:1px solid #111;">
-            <form method="POST" action="/documents/placement-tracker/update-status" style="display:flex; flex-direction:column; gap: 12px;">
-              <label style="color:#888; font-size:14px;">Company</label>
-              <input
-                type="text"
-                name="companyName"
-                placeholder="e.g., Amazon"
-                style="background:#000; color:#fff; border:1px solid #333; padding:12px; border-radius:10px; outline:none;"
-                required
-              />
+                  <% stageOrder.forEach(stageKey => { %>
 
-              <label style="color:#888; font-size:14px;">Role (optional)</label>
-              <input
-                type="text"
-                name="role"
-                placeholder="e.g., Software Engineer"
-                style="background:#000; color:#fff; border:1px solid #333; padding:12px; border-radius:10px; outline:none;"
-              />
+                    <% const stageData =
+                    app.stages && app.stages.get
+                    ? app.stages.get(stageKey)
+                    : app.stages && app.stages[stageKey]; %>
 
-              <label style="color:#888; font-size:14px;">Stage</label>
-              <select
-                name="stageKey"
-                style="background:#000; color:#fff; border:1px solid #333; padding:12px; border-radius:10px; outline:none;"
-                required
-              >
-                <% stageOrder.forEach(stageKey => { %>
-                  <option value="<%= stageKey %>"><%= stageLabelMap[stageKey] %></option>
+                    <% const hasDate = stageData && stageData.statusDate; %>
+
+                    <% const isDone = hasDate || stageKey === app.status; %>
+
+                    <div class="timeline-item">
+
+                      <div class="timeline-left">
+
+                        <div class="dot <%= isDone ? 'active' : '' %>"></div>
+
+                        <div class="timeline-stage">
+                          <%= stageLabelMap[stageKey] %>
+                        </div>
+
+                      </div>
+
+                      <div class="timeline-date">
+
+                        <%= hasDate
+                        ? new Date(stageData.statusDate).toLocaleDateString()
+                        : '' %>
+
+                      </div>
+
+                    </div>
+
+                  <% }) %>
+
+                </div>
+
+              </div>
+
+            <% }) %>
+
+          </div>
+
+        <% } %>
+
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+
+        
+<!-- UPDATE STATUS PANEL -->
+<div class="panel">
+
+  <h2 class="section-title">
+    Update Status
+  </h2>
+
+  <form
+    method="POST"
+    action="/documents/placement-tracker/update-status"
+    class="update-form"
+  >
+
+    <!-- COMPANY -->
+    <div class="form-group">
+
+      <label>Company Name</label>
+
+      <input
+        type="text"
+        name="companyName"
+        placeholder="e.g. Amazon"
+        required
+      />
+
+    </div>
+
+    <!-- ROLE -->
+    <div class="form-group">
+
+      <label>Role</label>
+
+      <input
+        type="text"
+        name="role"
+        placeholder="e.g. Software Engineer"
+      />
+
+    </div>
+
+    <!-- STAGE -->
+    <div class="form-group">
+
+      <label>Stage</label>
+
+      <select name="stageKey" required>
+
+        <% stageOrder.forEach(stageKey => { %>
+
+          <option value="<%= stageKey %>">
+            <%= stageLabelMap[stageKey] %>
+          </option>
+
+        <% }) %>
+
+      </select>
+
+    </div>
+
+    <!-- DATE -->
+    <div class="form-group">
+
+      <label>Date</label>
+
+      <input
+        type="date"
+        name="statusDate"
+      />
+
+    </div>
+
+    <!-- BUTTON -->
+    <button type="submit" class="primary-btn">
+      Save / Update
+    </button>
+
+  </form>
+
+  <% if(error){ %>
+    <div class="message error">
+      <%= error %>
+    </div>
+  <% } %>
+
+  <% if(success){ %>
+    <div class="message success">
+      <%= success %>
+    </div>
+  <% } %>
+
+</div>
+
+
+
+        <!-- DELETE -->
+        <div class="panel">
+
+          <h2 class="section-title">
+            Delete Application
+          </h2>
+
+          <form
+            method="POST"
+            action="/documents/placement-tracker/delete-application"
+          >
+
+            <div>
+
+              <label>Company</label>
+
+              <select name="companyId" required>
+
+                <option disabled selected>
+                  Select Company
+                </option>
+
+                <% applications.forEach(app => { %>
+
+                  <option value="<%= app.companyId %>">
+                    <%= app.companyName %>
+                  </option>
+
                 <% }) %>
+
               </select>
 
-              <label style="color:#888; font-size:14px;">Date (optional)</label>
-              <input
-                type="date"
-                name="statusDate"
-                style="background:#000; color:#fff; border:1px solid #333; padding:12px; border-radius:10px; outline:none;"
-              />
-
-              <button
-                type="submit"
-                style="
-                  margin-top: 8px;
-                  background:#fff;
-                  color:#000;
-                  border:none;
-                  padding:12px 16px;
-                  border-radius:12px;
-                  font-weight:700;
-                  cursor:pointer;
-                "
-                onmouseover="this.style.opacity='0.85'"
-                onmouseout="this.style.opacity='1'"
-              >
-                Save / Update
-              </button>
-            </form>
-
-            <% if (error) { %>
-              <div style="margin-top: 12px; color:#ff6b6b; font-size:13px;">
-                <%= error %>
-              </div>
-            <% } %>
-
-            <% if (success) { %>
-              <div style="margin-top: 12px; color:#7CFFB2; font-size:13px;">
-                <%= success %>
-              </div>
-            <% } %>
-          </div>
-
-          <div style="margin-top: 20px;">
-            <h4 style="margin: 0 0 10px; font-weight: 600;">Delete Application</h4>
-            <div style="background:#0a0a0a; padding: 18px; border-radius: 15px; border:1px solid #111;">
-              <form method="POST" action="/documents/placement-tracker/delete-application" style="display:flex; flex-direction:column; gap: 10px;">
-                <label style="color:#888; font-size:14px;">Company</label>
-                <select
-                  name="companyId"
-                  style="background:#000; color:#fff; border:1px solid #333; padding:12px; border-radius:10px; outline:none;"
-                  required
-                >
-                  <option value="" selected disabled>Select a company</option>
-                  <% if (applications && applications.length) { %>
-                    <% applications.forEach(app => { %>
-                      <option value="<%= app.companyId %>"><%= app.companyName %></option>
-                    <% }) %>
-                  <% } %>
-                </select>
-
-                <button
-                  type="submit"
-                  style="
-                    background:none;
-                    border:1px solid #ff4d4d;
-                    color:#ff4d4d;
-                    padding:12px 16px;
-                    border-radius:12px;
-                    font-weight:700;
-                    cursor:pointer;
-                  "
-                  onmouseover="this.style.background='#ff4d4d1a'"
-                  onmouseout="this.style.background='transparent'"
-                >
-                  Delete
-                </button>
-              </form>
             </div>
-          </div>
+
+            <button class="danger-btn">
+              Delete Application
+            </button>
+
+          </form>
+
         </div>
+
       </div>
+
     </div>
 
-    <!-- FOOTER -->
-    <div style="padding: 20px; text-align: center; border-top: 1px solid #111; color: #555; font-size: 13px;">
-      © <%= new Date().getFullYear() %> PlacementPro. Built for smarter placements.
-    </div>
-  </body>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    © <%= new Date().getFullYear() %> PlacementPro.
+    Built for smarter placements.
+  </footer>
+
+</body>
 </html>
 
