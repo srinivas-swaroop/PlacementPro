@@ -1,295 +1,198 @@
-# PlacementPro 
+# PlacementPro
 
-PlacementPro is a **Node.js + Express based document and resume management platform** designed to help students organize their placement documents and analyze resumes using **AI-powered ATS scoring**.
-
-The platform allows users to:
-
-* Securely authenticate
-* Upload and manage personal documents
-* Store files in user-specific folders
-* Analyze resumes against job descriptions using AI
-* Get ATS score and improvement suggestions
+PlacementPro is a **Node.js + Express** based platform for students to **manage placement documents**, run **AI-powered ATS (Resume) analysis**, and now **track job applications end-to-end** with stage-wise timestamps.
 
 ---
 
-# Features ✨
+## ✅ Features
 
-### 🔐 Authentication System
+### 🔐 Authentication
+- Signup + Login
+- Password hashing with **bcrypt**
+- JWT auth via **HTTP-only cookies**
+- Protected routes using `restrictMiddleware`
 
-* Secure login and signup
-* Password hashing using **bcrypt**
-* Session authentication using **JWT**
-* Token stored in **HTTP-only cookies**
+### 📁 Document Management
+- Upload documents (stored under user-specific folders)
+- View uploaded documents
+- Delete documents securely
 
-### 📁 Document Manager
+### 🤖 AI ATS Resume Analyzer
+- Upload resume (PDF)
+- Provide Job Description
+- AI returns:
+  - **ATS score (0-100)**
+  - **Improvement suggestions**
 
-* Upload documents
-* Each user gets a **separate storage folder**
-* View uploaded documents
-* Delete documents securely
-
-### 🤖 AI Resume ATS Analyzer
-
-* Upload resume (PDF)
-* Enter job description
-* AI analyzes resume
-* Generates:
-
-  * ATS score (out of 100)
-  * Improvement suggestions
-
-### 📊 Dashboard
-
-* Personalized user dashboard
-* Access all platform features
-
----
-
-# Tech Stack 🛠
-
-### Backend
-
-* Node.js
-* Express.js
-
-### Database
-
-* MongoDB
-* Mongoose
-
-### Authentication
-
-* JWT (JSON Web Tokens)
-* bcrypt
-
-### File Handling
-
-* Multer
-* File System (fs)
-
-### AI Integration
-
-* Groq API
-* Llama 3.1 model
-
-### Templating
-
-* EJS
+### 📊 Placement Tracker (NEW)
+Track placement journey per company with:
+- Stages:
+  - Applied
+  - Online Assessment Completed
+  - Interview Attended
+  - HR Round
+  - Offer Received
+  - Rejected
+- **Timestamps/dates** stored per stage
+- Manual status updates per company
+- Progress/stage indicators in UI
+- Filters: All / Active / Rejected / Offer Received
 
 ---
 
-# Project Structure 📂
+## Tech Stack 🛠
+- Node.js
+- Express.js
+- EJS templating
+- MongoDB + Mongoose
+- Multer + fs for uploads
+- JWT + bcrypt
+- Groq (Llama) for AI ATS analysis
 
-```
+---
+
+## Project Structure
+
+```text
 PlacementPro
 │
-├── routes
+├── index.js
+├── routes/
 │   ├── auth.js
 │   ├── dashboard.js
-│   └── documentHolder.js
+│   └── docuementHolder.js
 │
-├── middleware
+├── middleware/
 │   └── restrictMiddleware.js
 │
-├── models
-│   └── userModel.js
+├── models/
+│   ├── userModel.js
+│   ├── forgetPassword.js
+│   └── placementTracker.js
 │
-├── uploads
-│   └── userId folders
-│
-├── views
-│   ├── login_get.ejs
-│   ├── register_get.ejs
+├── views/
+│   ├── home.ejs
 │   ├── dashboard.ejs
 │   ├── documentHolder.ejs
-│   └── uploadATSEJS.ejs
+│   ├── uploadATSEJS.ejs
+│   ├── linkedinATSAJS.ejs
+│   └── placementTracker.ejs
 │
-├── server.js
-├── package.json
-└── README.md
+└── uploads/
 ```
 
 ---
 
-# Installation ⚙️
+## Environment Variables
+Create a `.env` file in the root folder.
 
-### 1️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/yourusername/PlacementPro.git
-cd PlacementPro
+```env
+JWT_SECRET=your_secret_key
+GROQ_API_KEY=your_groq_api_key
+MONGODB_URL=your_mongodb_connection_string
 ```
+
+> Note: Email OTP uses your nodemailer configuration in `controllers/mail.js`.
 
 ---
 
-### 2️⃣ Install Dependencies
+## Installation & Run
 
+### 1) Install dependencies
 ```bash
 npm install
 ```
 
----
+### 2) Start MongoDB
+Ensure MongoDB is running.
 
-### 3️⃣ Setup Environment Variables
-
-Create a `.env` file in the root directory.
-
-```
-JWT_SECRET=your_secret_key
-GROQ_API_KEY=your_groq_api_key
-```
-
----
-
-### 4️⃣ Start MongoDB
-
-Make sure MongoDB is running locally.
-
-```
-mongodb://localhost:27017/placementPro
-```
-
----
-
-### 5️⃣ Run the Application
-
+### 3) Run the server
 ```bash
-node server.js
+node index.js
 ```
 
-or using nodemon
-
+or
 ```bash
-nodemon server.js
+nodemon index.js
 ```
 
 ---
 
-# API Routes 🌐
+## Endpoints 🌐
 
-## Authentication
+### Authentication
+| Method | Route | Description |
+|---|---|---|
+| GET | `/auth/login` | Login page |
+| POST | `/auth/login` | Login |
+| GET | `/auth/signup` | Signup page |
+| POST | `/auth/signup` | Create account |
+| GET | `/auth/logout` | Logout |
 
-| Method | Route          | Description       |
-| ------ | -------------- | ----------------- |
-| GET    | `/auth/login`  | Login page        |
-| POST   | `/auth/login`  | Login user        |
-| GET    | `/auth/signup` | Signup page       |
-| POST   | `/auth/signup` | Register new user |
-| GET    | `/auth/logout` | Logout user       |
+### Dashboard
+| Method | Route | Description |
+|---|---|---|
+| GET | `/dashboard` | Dashboard page |
 
----
+### Documents
+| Method | Route | Description |
+|---|---|---|
+| GET | `/documents` | Documents manager |
+| POST | `/documents/upload` | Upload document |
+| POST | `/documents/delete` | Delete document |
 
-## Dashboard
+### Resume ATS Analyzer
+| Method | Route | Description |
+|---|---|---|
+| GET | `/documents/ATS` | ATS upload page |
+| POST | `/documents/ATS/upload` | Upload resume + analyze |
 
-| Method | Route        |
-| ------ | ------------ |
-| GET    | `/dashboard` |
+### LinkedIn Optimizer
+| Method | Route | Description |
+|---|---|---|
+| GET | `/documents/linkedin` | LinkedIn ATS page |
+| POST | `/documents/linkedin/Upload` | Upload profile + analyze |
 
----
-
-## Document Management
-
-| Method | Route               |
-| ------ | ------------------- |
-| GET    | `/documents`        |
-| POST   | `/documents/upload` |
-| POST   | `/documents/delete` |
-
----
-
-## Resume ATS Analyzer
-
-| Method | Route                   |
-| ------ | ----------------------- |
-| GET    | `/documents/ATS`        |
-| POST   | `/documents/ATS/upload` |
-
----
-
-# Resume ATS Workflow 🤖
-
-1️⃣ User uploads resume (PDF)
-
-2️⃣ Resume text extracted using
-
-```
-pdf-parse
-```
-
-3️⃣ Job description provided by user
-
-4️⃣ AI model analyzes resume vs job description
-
-5️⃣ Returns
-
-```
-{
- "score": number out of 100,
- "suggestions": []
-}
-```
+### Placement Tracker (NEW)
+| Method | Route | Description |
+|---|---|---|
+| GET | `/documents/placement-tracker` | Placement tracker UI + filters |
+| POST | `/documents/placement-tracker/update-status` | Add company + update stage/timestamp |
+| POST | `/documents/placement-tracker/delete-application` | Delete company entry |
 
 ---
 
-# Security Features 🔒
+## Placement Tracker Stage Model
+Stages are stored per company as:
+- `status` (current stage)
+- `stages[stageKey].statusDate` (timestamp per stage)
 
-* Password hashing using bcrypt
-* JWT authentication
-* HTTP-only cookies
-* User specific document folders
-* Protected routes with middleware
-
----
-
-# Future Improvements 🚧
-
-* Google OAuth login
-* Resume keyword highlighting
-* File preview
-* Resume version history
-* ATS keyword matching
-* Deployment (AWS / Render)
+Configured stages:
+- `applied`
+- `onlineAssessmentCompleted`
+- `interviewAttended`
+- `hrRound`
+- `offerReceived`
+- `rejected`
 
 ---
 
-# Screenshots 📷
-
-You can add screenshots here later.
-
-Example:
-
-```
-Dashboard UI
-Document Manager
-ATS Analyzer
-```
+## Security Notes 🔒
+- All protected endpoints use `restrictMiddleware`
+- JWT stored in **HTTP-only cookies**
+- File deletion checks path belongs to user upload directory
 
 ---
 
-# Contributing 🤝
-
-Contributions are welcome.
-
-Steps:
-
-1. Fork the repository
-2. Create a new branch
-3. Make changes
-4. Submit a pull request
+## Future Improvements 🚧
+- Role-based admin view
+- Multiple resumes per job role
+- Drag-and-drop stage ordering
+- Company details expansion (job link, location, salary)
+- Resume stage comparisons and history
 
 ---
 
-# License 📜
-
-This project is licensed under the MIT License.
-
----
-
-# Author 👨‍💻
-
+## Author
 **Srinivas Swaroop**
-
-Undergraduate
-VIT AP University
-
 
