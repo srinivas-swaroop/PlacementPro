@@ -3,6 +3,10 @@ const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
 const restrictMiddleware = require("../middleware/restrictMiddleware");
+const PlacementTracker = require("../models/placementTracker");
+const mongoose = require('mongoose');
+
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -101,6 +105,7 @@ documentHolder.get("/", restrictMiddleware, async (req, res) => {
 
     console.log(userObjectId, username);
 
+
     const userFolderPath = path.join(
       __dirname,
       "..",
@@ -146,12 +151,13 @@ documentHolder.post('/delete', restrictMiddleware, (req, res) => {
         const { filename } = req.body;
         const userObjectId = req.user._id;
 
-         const userFolderPath = path.join(
+        const userFolderPath = path.join(
             __dirname,
             '..',
             'uploads',
             userObjectId.toString()
         );
+
 
         const filePath = path.join(userFolderPath, filename);
 
@@ -304,6 +310,7 @@ documentHolder.post(
   restrictMiddleware,
   uploadLinkedin.single("linkedinPDF"),
   async (req, res) => {
+
     try {
       const pdfBuffer = req.file.buffer;
 
@@ -358,5 +365,173 @@ Return ONLY valid JSON like this:
     }
   }
 );
+
+const stages = [
+    "Applied",
+    "Online Assessment Completed",
+    "Interview Attended",
+    "HR Round",
+    "Offer Received",
+    "Rejected"
+];
+
+documentHolder.get("/placement-tracker", restrictMiddleware, async (req, res) => {
+    try {
+
+        const filter = req.query.status || "all";
+
+        const tracker = await PlacementTracker.findOne({
+            userId: req.user._id
+        });
+
+        let applications = tracker?.applications || [];
+
+        if (filter === "active") {
+            applications = applications.filter(app => app.status !== "Rejected");
+        }
+
+        if (filter === "Rejected") {
+            applications = applications.filter(app => app.status === "Rejected");
+        }
+
+        if (filter === "Offer Received") {
+            applications = applications.filter(app => app.status === "Offer Received");
+        }
+
+        res.render("placementTracker", {
+            username: req.user.username,
+            userId: req.user._id,
+            applications,
+            stages,
+            filter
+        });
+
+    } catch (err) {
+        console.error(err);
+        return res.redirect("/auth/login");
+    }
+});
+
+documentHolder.post("/placement-tracker/update-status", restrictMiddleware, async (req, res) => {
+
+    try {
+
+        const {
+            companyName,
+            role,
+            stageKey,
+            statusDate
+        } = req.body;
+
+
+        let tracker = await PlacementTracker.findOne({
+            userId: req.user._id
+        });
+
+
+        if (!tracker) {
+
+            tracker = new PlacementTracker({
+                userId: req.user._id,
+                applications: []
+            });
+
+        }
+
+
+        let app = tracker.applications.find(a =>
+            a.companyName.toLowerCase() === companyName.toLowerCase()
+        );
+
+
+        if (app) {
+
+            app.status = stageKey;
+
+            if (role)
+                app.role = role;
+
+
+            app.stages[stageKey] = {
+                statusDate: statusDate ? new Date(statusDate) : new Date()
+            };
+
+        }
+
+        else {
+
+            tracker.applications.push({
+
+                companyId: new mongoose.Types.ObjectId().toString(),
+
+                companyName,
+
+                role,
+
+                status: stageKey,
+
+                stages: {
+                    [stageKey]: {
+                        statusDate: statusDate ? new Date(statusDate) : new Date()
+                    }
+                }
+
+            });
+
+        }
+
+
+        await tracker.save();
+
+        return res.redirect("/documents/placement-tracker");
+
+    }
+
+    catch (err) {
+
+        console.error(err);
+
+        return res.redirect("/documents/placement-tracker");
+
+    }
+
+});
+
+documentHolder.post("/placement-tracker/delete-application", restrictMiddleware, async (req, res) => {
+
+    try {
+
+        const companyId = req.body.companyId;
+
+        const tracker = await PlacementTracker.findOne({
+            userId: req.user._id
+        });
+
+
+        if (!tracker) {
+            return res.redirect("/documents/placement-tracker");
+        }
+
+
+        tracker.applications = tracker.applications.filter(app =>
+            app.companyId !== companyId
+        );
+
+
+        await tracker.save();
+
+        return res.redirect("/documents/placement-tracker");
+
+    }
+
+    catch (err) {
+
+        console.error(err);
+
+        return res.redirect("/documents/placement-tracker");
+
+    }
+
+});
 
 module.exports = { documentHolder };
