@@ -366,19 +366,33 @@ Return ONLY valid JSON like this:
   }
 );
 
-const stages = [
-    "Applied",
-    "Online Assessment Completed",
-    "Interview Attended",
-    "HR Round",
-    "Offer Received",
-    "Rejected"
+
+const stageLabelMap = {
+    applied: "Applied",
+    oa: "Online Assessment Completed",
+    interview: "Interview Attended",
+    hr: "HR Round",
+    offerReceived: "Offer Received",
+    rejected: "Rejected"
+};
+
+const stageOrder = [
+    "applied",
+    "oa",
+    "interview",
+    "hr",
+    "offerReceived",
+    "rejected"
 ];
 
-documentHolder.get("/placement-tracker", restrictMiddleware, async (req, res) => {
+documentHolder.get(
+    "/placement-tracker",
+    restrictMiddleware,
+    async (req, res) => {
+
     try {
 
-        const filter = req.query.status || "all";
+        const filterStatus = req.query.status || "all";
 
         const tracker = await PlacementTracker.findOne({
             userId: req.user._id
@@ -386,29 +400,36 @@ documentHolder.get("/placement-tracker", restrictMiddleware, async (req, res) =>
 
         let applications = tracker?.applications || [];
 
-        if (filter === "active") {
-            applications = applications.filter(app => app.status !== "Rejected");
+        // FILTERS
+
+        if (filterStatus === "active") {
+            applications = applications.filter(
+                app => app.status !== "rejected"
+            );
         }
 
-        if (filter === "Rejected") {
-            applications = applications.filter(app => app.status === "Rejected");
+        if (filterStatus === "rejected") {
+            applications = applications.filter(
+                app => app.status === "rejected"
+            );
         }
 
-        if (filter === "Offer Received") {
-            applications = applications.filter(app => app.status === "Offer Received");
+        if (filterStatus === "offerReceived") {
+            applications = applications.filter(
+                app => app.status === "offerReceived"
+            );
         }
 
-      
-res.render("placementTracker", {
-    username: req.user.username,
-    userId: req.user._id,
-    applications,
-    stages,
-    filterStatus: filter
-});
-
-
-
+        res.render("placementTracker", {
+            username: req.user.username,
+            userId: req.user._id,
+            applications,
+            stageLabelMap,
+            stageOrder,
+            filterStatus,
+            error: null,
+            success: null
+        });
     } catch (err) {
         console.error(err);
         return res.redirect("/auth/login");
